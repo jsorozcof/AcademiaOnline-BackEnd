@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AcademiaOnline.Domain.Common;
+using System;
 using System.Collections.Generic;
 
-namespace AcademiaOnline.Infrastructure.Academia
+namespace AcademiaOnline.Domain.Entities
 {
-    public partial class TbEstudianteMaterium
+    public partial class TbEstudianteMateria : BaseEntity
     {
-        public int Id { get; set; }
         public int EstudianteId { get; set; }
         public int MateriaId { get; set; }
 

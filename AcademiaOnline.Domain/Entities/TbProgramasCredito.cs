@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AcademiaOnline.Domain.Common;
 
-namespace AcademiaOnline.Infrastructure.Academia
+namespace AcademiaOnline.Domain.Entities
 {
-    public partial class TbProgramasCredito
+    public partial class TbProgramasCredito : BaseEntity
     {
         public TbProgramasCredito()
         {
             TbEstudianteProgramas = new HashSet<TbEstudiantePrograma>();
         }
 
-        public int Id { get; set; }
         public string Nombre { get; set; } = null!;
         public int TotalCreditos { get; set; }
 

@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AcademiaOnline.Domain.Common;
 
-namespace AcademiaOnline.Infrastructure.Academia
+namespace AcademiaOnline.Domain.Entities
 {
-    public partial class TbEstudiante
+    public partial class TbEstudiante : BaseEntity
     {
         public TbEstudiante()
         {
-            TbEstudianteMateria = new HashSet<TbEstudianteMaterium>();
+            TbEstudianteMateria = new HashSet<TbEstudianteMateria>();
         }
 
-        public int Id { get; set; }
         public string Codigo { get; set; } = null!;
         public string Nombre { get; set; } = null!;
         public string Email { get; set; } = null!;
         public int ProgramaCreditos { get; set; }
 
         public virtual TbEstudiantePrograma? TbEstudiantePrograma { get; set; }
-        public virtual ICollection<TbEstudianteMaterium> TbEstudianteMateria { get; set; }
+        public virtual ICollection<TbEstudianteMateria> TbEstudianteMateria { get; set; }
     }
 }

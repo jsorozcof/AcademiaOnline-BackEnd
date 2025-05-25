@@ -1,5 +1,9 @@
 ﻿using AcademiaOnline.Infrastructure;
+using AcademiaOnline.Application;
+using AcademiaOnline.Infrastructure.Academia;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using AcademiaOnline.Application.Features.Estudiantes.Commands.RegisterEstudiante;
 
 namespace AcademiaOnline.Api
 {
@@ -16,15 +20,21 @@ namespace AcademiaOnline.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
-
-            services.AddDbContext<AcademiaDbContext>(opt =>
+            
+            //Agregar capas personalizadas (Application, Infrastructure)
+            services.AddApplication();     // CQRS, Validadores, MediatR
+            services.AddInfrastructure(Configuration.GetConnectionString("ConexionDatabase")); // Dapper, repos
+            services.AddDbContext<AcademiaOnlineBDContext>(opt =>
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("ConexionDatabase"));
             });
 
-            //services.AddMediatR(typeof(Nuevo.Manejador).Assembly);
+            services.AddMediatR(typeof(RegisterEstudianteCommand).Assembly);
             //services.AddAutoMapper(typeof(Consulta.Ejecuta));
 
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
 
         }
 
@@ -34,6 +44,8 @@ namespace AcademiaOnline.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AcademiaOnline.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -17,11 +18,11 @@ namespace AcademiaOnline.Infrastructure.Academia
         }
 
         public virtual DbSet<TbEstudiante> TbEstudiantes { get; set; } = null!;
-        public virtual DbSet<TbEstudianteMaterium> TbEstudianteMateria { get; set; } = null!;
+        public virtual DbSet<TbEstudianteMateria> TbEstudianteMateria { get; set; } = null!;
         public virtual DbSet<TbEstudiantePrograma> TbEstudianteProgramas { get; set; } = null!;
         public virtual DbSet<TbMateria> TbMaterias { get; set; } = null!;
-        public virtual DbSet<TbProfesorMaterium> TbProfesorMateria { get; set; } = null!;
-        public virtual DbSet<TbProfesore> TbProfesores { get; set; } = null!;
+        public virtual DbSet<TbProfesorMateria> TbProfesorMateria { get; set; } = null!;
+        public virtual DbSet<TbProfesor> TbProfesores { get; set; } = null!;
         public virtual DbSet<TbProgramasCredito> TbProgramasCreditos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -49,7 +50,7 @@ namespace AcademiaOnline.Infrastructure.Academia
                 entity.Property(e => e.ProgramaCreditos).HasColumnName("Programa_Creditos");
             });
 
-            modelBuilder.Entity<TbEstudianteMaterium>(entity =>
+            modelBuilder.Entity<TbEstudianteMateria>(entity =>
             {
                 entity.ToTable("TbEstudiante_Materia");
 
@@ -106,7 +107,7 @@ namespace AcademiaOnline.Infrastructure.Academia
                 entity.Property(e => e.Nombre).HasMaxLength(100);
             });
 
-            modelBuilder.Entity<TbProfesorMaterium>(entity =>
+            modelBuilder.Entity<TbProfesorMateria>(entity =>
             {
                 entity.ToTable("TbProfesor_Materia");
 
@@ -130,7 +131,7 @@ namespace AcademiaOnline.Infrastructure.Academia
                     .HasConstraintName("FK_Profesor");
             });
 
-            modelBuilder.Entity<TbProfesore>(entity =>
+            modelBuilder.Entity<TbProfesor>(entity =>
             {
                 entity.Property(e => e.Nombre).HasMaxLength(100);
             });
