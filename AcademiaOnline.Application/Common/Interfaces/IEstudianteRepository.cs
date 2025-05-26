@@ -1,4 +1,5 @@
-﻿using AcademiaOnline.Domain.Entities;
+﻿using AcademiaOnline.Application.Features.Estudiantes.Dtos;
+using AcademiaOnline.Domain.Entities;
 
 namespace AcademiaOnline.Application.Common.Interfaces
 {
@@ -7,7 +8,6 @@ namespace AcademiaOnline.Application.Common.Interfaces
         Task AddAsync(TbEstudiante estudiante);
 
         Task<TbEstudiante?> GetByIdAsync(int id);
-
         void Update(TbEstudiante estudiante);
 
         void Delete(TbEstudiante estudiante);
@@ -20,8 +20,9 @@ namespace AcademiaOnline.Application.Common.Interfaces
 
         // Retorna nombres de estudiantes que comparten una clase
         Task<IEnumerable<TbEstudiante>> GetEstudiantesPorMateriaAsync(int estudianteId, int materiaId);
-
-
+        Task<List<GetAllEstudiantesDto>> ObtenerEstudiantesAsync();
+        Task AddProgramaAsync(TbEstudiantePrograma adhesion);
+        Task<bool> EstudianteYaTieneProgramaAsync(int estudianteId);
         Task SaveChangesAsync();
     }
 }

@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Materias\" />
+    <Folder Include="Features\Materias\Commands\" />
     <Folder Include="Features\Profesores\" />
+    <Folder Include="Features\Programas\Commands\" />
   </ItemGroup>
 
   <ItemGroup>

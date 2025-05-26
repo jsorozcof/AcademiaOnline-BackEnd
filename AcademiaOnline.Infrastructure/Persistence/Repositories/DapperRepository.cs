@@ -48,7 +48,7 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al  los registros: {ex.Message}");
+                Console.WriteLine($"Error al obtener los registros: {ex.Message}");
                 throw;
             }
         }

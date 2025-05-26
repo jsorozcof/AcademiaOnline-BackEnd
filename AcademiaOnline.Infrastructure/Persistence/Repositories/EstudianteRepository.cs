@@ -1,4 +1,5 @@
 ﻿using AcademiaOnline.Application.Common.Interfaces;
+using AcademiaOnline.Application.Features.Estudiantes.Dtos;
 using AcademiaOnline.Domain.Entities;
 using AcademiaOnline.Infrastructure.Academia;
 using Dapper;
@@ -130,6 +131,32 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
             }
         }
 
+        public async Task AddProgramaAsync(TbEstudiantePrograma adhesion)
+        {
+            await _context.TbEstudianteProgramas.AddAsync(adhesion);
+        }
+
+        public async Task<List<GetAllEstudiantesDto>> ObtenerEstudiantesAsync()
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+                var estudiantes = await connection.QueryAsync<GetAllEstudiantesDto>(
+                    "fo_ObtenerEstudiantes",
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return estudiantes.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener los estudiantes.", ex);
+            }
+        }
+        public async Task<bool> EstudianteYaTieneProgramaAsync(int estudianteId)
+        {
+            return await _context.TbEstudianteProgramas.AnyAsync(ep => ep.EstudianteId == estudianteId);
+        }
         public async Task SaveChangesAsync()
         {
             try

@@ -13,7 +13,8 @@ namespace AcademiaOnline.Infrastructure
             services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
 
             services.AddScoped<IEstudianteRepository, EstudianteRepository>();
-            //services.AddScoped<IUnitOfWork, UnitOfWork>(); // Si lo estás usando
+            services.AddScoped<IMateriasRepository, MateriasRepository>();
+            services.AddScoped<IProgramasCreditosRepository, ProgramasCreditosRepository>();
 
             return services;
         }

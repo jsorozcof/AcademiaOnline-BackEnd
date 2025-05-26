@@ -13,9 +13,9 @@ namespace AcademiaOnline.Application.Features.Estudiantes.Commands.RegisterEstud
              .NotEmpty().WithMessage("El correo no puede estar vacío")
              .EmailAddress().WithMessage("El correo debe ser válido");
 
-            RuleFor(x => x.MateriaIds)
-                .NotNull().WithMessage("Debe seleccionar materias.")
-                .Must(m => m.Count == 3).WithMessage("Debe seleccionar exactamente 3 materias.");
+            //RuleFor(x => x.MateriaIds)
+            //    .NotNull().WithMessage("Debe seleccionar materias.")
+            //    .Must(m => m.Count == 3).WithMessage("Debe seleccionar exactamente 3 materias.");
         }
     }
 }

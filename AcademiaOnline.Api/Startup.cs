@@ -4,6 +4,9 @@ using AcademiaOnline.Infrastructure.Academia;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.RegisterEstudiante;
+using AcademiaOnline.Application.Features.Estudiantes.Commands.AdherirEstudianteAPrograma;
+using AcademiaOnline.Application.Interfaces;
+using AcademiaOnline.Application.Services;
 
 namespace AcademiaOnline.Api
 {
@@ -16,12 +19,10 @@ namespace AcademiaOnline.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
-            
-            //Agregar capas personalizadas (Application, Infrastructure)
+            //services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<RegisterEstudianteCommand>());
+
             services.AddApplication();     // CQRS, Validadores, MediatR
             services.AddInfrastructure(Configuration.GetConnectionString("ConexionDatabase")); // Dapper, repos
             services.AddDbContext<AcademiaOnlineBDContext>(opt =>
@@ -30,7 +31,20 @@ namespace AcademiaOnline.Api
             });
 
             services.AddMediatR(typeof(RegisterEstudianteCommand).Assembly);
+            services.AddTransient<IEstudianteService, EstudianteService>();
+            services.AddTransient<IMateriasService, MateriasService>();
+            services.AddTransient<IProgramasCreditosService, ProgramasCreditosService>();
+            services.AddMediatR(typeof(AdherirEstudianteAProgramaHandler));
+
             //services.AddAutoMapper(typeof(Consulta.Ejecuta));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngular",
+                    policy => policy.WithOrigins("http://localhost:4200")
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -51,7 +65,7 @@ namespace AcademiaOnline.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors("AllowAngular");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
