@@ -1,4 +1,5 @@
 ﻿using AcademiaOnline.Application.Features.Estudiantes.Dtos;
+using AcademiaOnline.Domain.Entities;
 
 namespace AcademiaOnline.Application.Interfaces
 {
@@ -7,5 +8,6 @@ namespace AcademiaOnline.Application.Interfaces
         Task<bool> AdherirEstudianteAProgramaAsync(int estudianteId, int programaId);
         Task<bool> TieneClaseConProfesorAsync(int estudianteId, int profesorId);
         Task<List<GetAllEstudiantesDto>> ObtenerEstudiantesAsync();
+        Task<bool> CrearAlumnoBasicAsync(string nombre, string email);
     }
 }

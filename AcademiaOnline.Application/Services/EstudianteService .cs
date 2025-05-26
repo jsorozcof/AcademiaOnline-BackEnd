@@ -3,18 +3,30 @@ using AcademiaOnline.Application.Features.Estudiantes.Dtos;
 using AcademiaOnline.Application.Interfaces;
 using AcademiaOnline.Domain.Entities;
 using MediatR;
+using Microsoft.VisualBasic;
 
 namespace AcademiaOnline.Application.Services
 {
     public class EstudianteService : IEstudianteService
     {
         private readonly IEstudianteRepository _estudianteRepository;
-        //private readonly IProgramaCreditoRepository _programaCreditoRepository;
 
-        public EstudianteService(IEstudianteRepository estudianteRepository) //IProgramaCreditoRepository programaCreditoRepository
+        public EstudianteService(IEstudianteRepository estudianteRepository)
         {
             _estudianteRepository = estudianteRepository ?? throw new ArgumentNullException(nameof(estudianteRepository));
-            //_programaCreditoRepository = programaCreditoRepository ?? throw new ArgumentNullException(nameof(programaCreditoRepository));
+        }
+
+        public async Task<bool> CrearAlumnoBasicAsync(string nombre, string email)
+        {
+            try
+            {
+                string codigoGen = CodeGenerator.GenerateCode();
+                return await _estudianteRepository.AddAsync(codigoGen,nombre, email);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo guardar el alumno.", ex);
+            }
         }
 
         public async Task<bool> AdherirEstudianteAProgramaAsync(int estudianteId, int programaId)
@@ -63,6 +75,18 @@ namespace AcademiaOnline.Application.Services
             
             return tieneClase;
 
+        }
+
+        private class CodeGenerator
+        {
+            private static int currentNumber = 1115;
+
+            public static string GenerateCode()
+            {
+                string code = $"A{currentNumber}";
+                currentNumber++;
+                return code;
+            }
         }
     }
 }

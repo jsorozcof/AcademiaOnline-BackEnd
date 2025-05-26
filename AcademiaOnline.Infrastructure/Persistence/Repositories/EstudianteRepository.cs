@@ -22,15 +22,44 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
                                 ?? throw new ArgumentNullException("Connection string is missing.");
         }
 
-        public async Task AddAsync(TbEstudiante estudiante)
+        public async Task<bool> AddAsync(string codigo, string nombre, string email)
         {
             try
             {
-                await _context.TbEstudiantes.AddAsync(estudiante);
+                var ent = new TbEstudiante
+                {
+                    Codigo = codigo,
+                    Nombre = nombre,
+                    Email = email,
+                    ProgramaId = 1,
+                    ProgramaCreditos = 9
+                };
+
+                var resultSave = await _context.TbEstudiantes.AddAsync(ent);
+                int cambios = await _context.SaveChangesAsync();
+
+                if (cambios > 0)
+                {
+                    int estudianteId = ent.Id;
+
+                    // Insertar en TbEstudiante_Programa
+                    var estudiantePrograma = new TbEstudiantePrograma
+                    {
+                        EstudianteId = estudianteId,
+                        ProgramaId = ent.ProgramaId
+                    };
+
+                    await _context.TbEstudianteProgramas.AddAsync(estudiantePrograma);
+                    cambios = await _context.SaveChangesAsync();
+
+                    return cambios > 0;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al agregar el estudiante a la base de datos.", ex);
+                throw new Exception("Error al agregar el estudiante y vincularlo al programa.", ex);
             }
         }
 

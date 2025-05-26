@@ -22,7 +22,7 @@ namespace AcademiaOnline.Api.Controllers
         /// <summary>
         /// Registra un nuevo estudiante
         /// </summary>
-        [HttpPost("registrar")]
+        [HttpPost]
         public async Task<IActionResult> RegistrarEstudiante([FromBody] RegisterEstudianteCommand command)
         {
             var result = await _mediator.Send(command);
