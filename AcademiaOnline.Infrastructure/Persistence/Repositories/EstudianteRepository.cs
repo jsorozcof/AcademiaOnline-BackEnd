@@ -186,6 +186,17 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
         {
             return await _context.TbEstudianteProgramas.AnyAsync(ep => ep.EstudianteId == estudianteId);
         }
+
+        public async Task<string?> ObtenerProgramaDelEstudianteAsync(int estudianteId)
+        {
+            var programa = await _context.TbEstudianteProgramas
+                .Include(x => x.Programa)
+                .Where(ep => ep.EstudianteId == estudianteId)
+                .Select(ep => ep.Programa.Nombre)
+                .FirstOrDefaultAsync(); // Devuelve null si no encuentra ningún programa
+
+            return programa;
+        }
         public async Task SaveChangesAsync()
         {
             try
@@ -198,5 +209,9 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
             }
         }
 
+        public async Task<TbEstudiante?> GetByEmailAsync(string email)
+        {
+          return await _context.TbEstudiantes.FirstOrDefaultAsync(x => x.Email.Equals(email));
+        }
     }
 }

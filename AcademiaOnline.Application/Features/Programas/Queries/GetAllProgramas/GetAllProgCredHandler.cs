@@ -18,7 +18,7 @@ namespace AcademiaOnline.Application.Features.Programas.Queries.GetAllProgramas
         {
             var list = await _progCredService.ObtenerTodasAsync();
 
-            var result = list.Select(x => new GetAllProgramasCredDto { Id = x.Id, Nombre = x.Nombre }).ToList();
+            var result = list.Select(x => new GetAllProgramasCredDto { Id = x.Id, Nombre = x.Nombre, Creditos = x.TotalCreditos }).ToList();
 
             return result;
         }

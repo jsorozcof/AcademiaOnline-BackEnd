@@ -2,8 +2,6 @@
 using AcademiaOnline.Application.Features.Estudiantes.Dtos;
 using AcademiaOnline.Application.Interfaces;
 using AcademiaOnline.Domain.Entities;
-using MediatR;
-using Microsoft.VisualBasic;
 
 namespace AcademiaOnline.Application.Services
 {
@@ -29,18 +27,19 @@ namespace AcademiaOnline.Application.Services
             }
         }
 
-        public async Task<bool> AdherirEstudianteAProgramaAsync(int estudianteId, int programaId)
+        public async Task<(bool, string, string)> AdherirEstudianteAProgramaAsync(int estudianteId, int programaId)
         {
             var estudiante = await _estudianteRepository.GetByIdAsync(estudianteId);
             if (estudiante == null)
-                throw new Exception("El estudiante no existe.");
+                return (false, "El estudiante no existe.", "");
 
-            //var programa = await _programaCreditoRepository.GetByIdAsync(programaId);
-            //if (programa == null)
-            //    throw new Exception("El programa de créditos no existe.");
+            var tienePrograma = await _estudianteRepository.EstudianteYaTieneProgramaAsync(estudianteId);
+            if (tienePrograma)
+            {
+                var programa = await _estudianteRepository.ObtenerProgramaDelEstudianteAsync(estudianteId);
+                return (false, "El estudiante ya está adherido a un programa.", programa is null ? "" : programa);
+            }
 
-            if (await _estudianteRepository.EstudianteYaTieneProgramaAsync(estudianteId))
-                throw new Exception("El estudiante ya está adherido a un programa de créditos.");
 
             var nuevaAdhesion = new TbEstudiantePrograma
             {
@@ -51,10 +50,17 @@ namespace AcademiaOnline.Application.Services
             await _estudianteRepository.AddProgramaAsync(nuevaAdhesion);
             await _estudianteRepository.SaveChangesAsync();
 
-            return true;
+            return (true, "El estudiante ha sido adherido correctamente al programa.", "");
         }
 
+        public async Task<(bool, string)> ObtenerProgramaDelEstudianteAsync(int estudianteId)
+        {
+            var programa = await _estudianteRepository.ObtenerProgramaDelEstudianteAsync(estudianteId);
+            if(programa is null)
+                return (false, "");
 
+            return (true, programa);
+        }
 
         public async Task<List<GetAllEstudiantesDto>> ObtenerEstudiantesAsync()
         {
@@ -77,15 +83,23 @@ namespace AcademiaOnline.Application.Services
 
         }
 
-        private class CodeGenerator
+        public async Task<TbEstudiante> ObtenerEstudiantePorEmailAsync(string email)
         {
-            private static int currentNumber = 1115;
+            var estidiante = await _estudianteRepository.GetByEmailAsync(email);
+            if(estidiante == null)
+                throw new Exception("El estudiante no existe.");
+
+            return estidiante;
+        }
+
+        public static class CodeGenerator
+        {
+            private static readonly Random random = new();
 
             public static string GenerateCode()
             {
-                string code = $"A{currentNumber}";
-                currentNumber++;
-                return code;
+                int number = random.Next(1000, 9999);
+                return $"A{number}";
             }
         }
     }

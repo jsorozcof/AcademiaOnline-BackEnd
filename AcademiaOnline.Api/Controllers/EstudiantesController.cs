@@ -1,4 +1,5 @@
 ﻿using AcademiaOnline.Application.Features.Estudiantes.Commands.AdherirEstudianteAPrograma;
+using AcademiaOnline.Application.Features.Estudiantes.Commands.ObtenerProgramaDelEstudiante;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.RegisterEstudiante;
 using AcademiaOnline.Application.Features.Estudiantes.Queries.GetAllEstudiantes;
 using AcademiaOnline.Application.Features.Estudiantes.Queries.GetEstudiantesPorMateria;
@@ -57,8 +58,14 @@ namespace AcademiaOnline.Api.Controllers
         [HttpPost("adhesion")]
         public async Task<IActionResult> AdherirEstudianteAPrograma([FromBody] AdherirEstudianteAProgramaCommand command)
         {
-            var resultado = await _mediator.Send(command);
-            return resultado ? Ok("Estudiante adherido exitosamente") : BadRequest("Error en la adhesión");
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        [HttpPost("ObtenerProgramaEstudiante")]
+        public async Task<IActionResult> ObtenerProgramaEstudiante([FromBody] ObtenerProgramaEstudianteCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

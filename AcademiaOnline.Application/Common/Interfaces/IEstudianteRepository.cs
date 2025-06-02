@@ -8,6 +8,7 @@ namespace AcademiaOnline.Application.Common.Interfaces
         Task<bool> AddAsync(string codigo, string nombre, string email);
 
         Task<TbEstudiante?> GetByIdAsync(int id);
+        Task<TbEstudiante?> GetByEmailAsync(string email);
         void Update(TbEstudiante estudiante);
 
         void Delete(TbEstudiante estudiante);
@@ -23,6 +24,7 @@ namespace AcademiaOnline.Application.Common.Interfaces
         Task<List<GetAllEstudiantesDto>> ObtenerEstudiantesAsync();
         Task AddProgramaAsync(TbEstudiantePrograma adhesion);
         Task<bool> EstudianteYaTieneProgramaAsync(int estudianteId);
+        Task<string?> ObtenerProgramaDelEstudianteAsync(int estudianteId);
         Task SaveChangesAsync();
     }
 }
