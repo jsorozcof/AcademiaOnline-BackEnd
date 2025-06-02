@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/AcademiaOnline.Api/appsettings.json
+/AcademiaOnline.Api/appsettings.Development.json
