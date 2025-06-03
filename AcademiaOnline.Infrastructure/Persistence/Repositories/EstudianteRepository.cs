@@ -23,7 +23,49 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
                                 ?? throw new ArgumentNullException("Connection string is missing.");
         }
 
+        public async Task<List<MateriasInscritaDto>> ObtenerMateriasInscritasAsync(int estudianteId)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
 
+                var parameters = new DynamicParameters();
+                parameters.Add("@EstudianteId", estudianteId, DbType.Int32);
+
+                var result = await connection.QueryAsync<MateriasInscritaDto>(
+                    "fo_ValidarMateriasInscritasPorEstudiante",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener las materias inscritas del estudiante.", ex);
+            }
+        }
+        public async Task<IEnumerable<EstudianteCompaneroDto>> GetCompanerosDeClaseAsync(int estudianteId)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@EstudianteId", estudianteId, DbType.Int32);
+
+                var result = await connection.QueryAsync<EstudianteCompaneroDto>(
+                    "fo_ObtenerEstudiantesEnMismasMaterias",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener los compañeros de clase.", ex);
+            }
+        }
         public async Task<bool> SaveSelectedSubjectsAsync(List<int> MateriaIds, int EstudianteId)
         {
             using var connection = new SqlConnection(_connectionString);
@@ -218,6 +260,11 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
         public async Task<TbEstudiante?> GetByEmailAsync(string email)
         {
           return await _context.TbEstudiantes.FirstOrDefaultAsync(x => x.Email.Equals(email));
+        }
+
+        public Task<int> ObtenerCantidadMateriasInscritasAsync(int estudianteId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

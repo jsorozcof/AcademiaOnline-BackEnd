@@ -14,6 +14,15 @@ namespace AcademiaOnline.Application.Services
         {
             _estudianteRepository = estudianteRepository ?? throw new ArgumentNullException(nameof(estudianteRepository));
         }
+
+        public async Task<List<MateriasInscritaDto>> ObtenerMateriasInscritasAsync(int estudianteId)
+        {
+            return await _estudianteRepository.ObtenerMateriasInscritasAsync(estudianteId);
+        }
+        public async Task<IEnumerable<EstudianteCompaneroDto>> GetCompanerosDeClaseAsync(int estudianteId)
+        {
+            return await _estudianteRepository.GetCompanerosDeClaseAsync(estudianteId);
+        }
         public async Task<bool> SaveSelectedSubjectsAsync(List<int> MateriaIds, int EstudianteId)
         {
            return await _estudianteRepository.SaveSelectedSubjectsAsync(MateriaIds, EstudianteId);

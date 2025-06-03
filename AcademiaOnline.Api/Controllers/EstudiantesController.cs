@@ -1,10 +1,12 @@
 ﻿using AcademiaOnline.Application.Features.Estudiantes.Commands.AddSeleccionMateria;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.AdherirEstudianteAPrograma;
+using AcademiaOnline.Application.Features.Estudiantes.Commands.GetMateriasInscritas;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.ObtenerProgramaDelEstudiante;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.RegisterEstudiante;
 using AcademiaOnline.Application.Features.Estudiantes.Queries.GetAllEstudiantes;
 using AcademiaOnline.Application.Features.Estudiantes.Queries.GetEstudiantesPorMateria;
 using AcademiaOnline.Application.Features.Estudiantes.Queries.GetValidateProfesorEstudiante;
+using AcademiaOnline.Application.Features.Estudiantes.Queries.ObtenerCompanerosDeClaseQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -77,5 +79,19 @@ namespace AcademiaOnline.Api.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+        [HttpGet("ObtenerCompanerosClase/{estudianteId}")]
+        public async Task<IActionResult> GetCompaneros(int estudianteId)
+        {
+            var result = await _mediator.Send(new GetCompanerosDeClaseQuery(estudianteId));
+            return Ok(result);
+        }
+
+        [HttpGet("ObtenerMateriasInscritas/{estudianteId}")]
+        public async Task<IActionResult> GetEnrolledSubjects(int estudianteId)
+        {
+            var result = await _mediator.Send(new GetMateriasInscritasCommand(estudianteId));
+            return Ok(result);
+        }
+
     }
 }
