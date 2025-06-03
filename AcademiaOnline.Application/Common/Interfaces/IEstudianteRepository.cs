@@ -6,7 +6,7 @@ namespace AcademiaOnline.Application.Common.Interfaces
     public interface IEstudianteRepository
     {
         Task<bool> AddAsync(string codigo, string nombre, string email);
-
+        Task<bool> SaveSelectedSubjectsAsync(List<int> MateriaIds, int EstudianteId);
         Task<TbEstudiante?> GetByIdAsync(int id);
         Task<TbEstudiante?> GetByEmailAsync(string email);
         void Update(TbEstudiante estudiante);

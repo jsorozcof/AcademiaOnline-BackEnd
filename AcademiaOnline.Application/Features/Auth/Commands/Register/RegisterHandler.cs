@@ -39,7 +39,7 @@ namespace AcademiaOnline.Application.Features.Auth.Commands.Register
 
             // Creamos el Alumno
             var result = await _estudianteService.CrearAlumnoBasicAsync(request.Nombre, request.Correo);
-            if(result)
+            if(result.Item1)
             {
                 var user = new TbUsuario
                 {
@@ -54,7 +54,7 @@ namespace AcademiaOnline.Application.Features.Auth.Commands.Register
                 return resultado.Succeeded;
             }
 
-            throw new ManejadorExcepcion(HttpStatusCode.BadRequest, "No se pudo crear el Alumno");
+            throw new ManejadorExcepcion(HttpStatusCode.BadRequest, result.Item2);
 
         }
     }

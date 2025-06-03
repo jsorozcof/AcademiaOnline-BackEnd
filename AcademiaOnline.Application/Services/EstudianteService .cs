@@ -2,6 +2,7 @@
 using AcademiaOnline.Application.Features.Estudiantes.Dtos;
 using AcademiaOnline.Application.Interfaces;
 using AcademiaOnline.Domain.Entities;
+using System.Data;
 
 namespace AcademiaOnline.Application.Services
 {
@@ -13,13 +14,23 @@ namespace AcademiaOnline.Application.Services
         {
             _estudianteRepository = estudianteRepository ?? throw new ArgumentNullException(nameof(estudianteRepository));
         }
-
-        public async Task<bool> CrearAlumnoBasicAsync(string nombre, string email)
+        public async Task<bool> SaveSelectedSubjectsAsync(List<int> MateriaIds, int EstudianteId)
+        {
+           return await _estudianteRepository.SaveSelectedSubjectsAsync(MateriaIds, EstudianteId);
+        }
+        public async Task<(bool, string)> CrearAlumnoBasicAsync(string nombre, string email)
         {
             try
             {
+                // validar si el correo existe
+                var result = await _estudianteRepository.GetByEmailAsync(email);
+                if (result != null)
+                    return (false, $"Este correo {email} ya esta registrado.");
+
+
                 string codigoGen = CodeGenerator.GenerateCode();
-                return await _estudianteRepository.AddAsync(codigoGen,nombre, email);
+                var status =  await _estudianteRepository.AddAsync(codigoGen,nombre, email);
+                return (status, "Alumno creado con exito.");
             }
             catch (Exception ex)
             {

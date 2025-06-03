@@ -1,10 +1,12 @@
-﻿using AcademiaOnline.Domain.Entities;
+﻿using AcademiaOnline.Application.Common.Dto;
+using AcademiaOnline.Domain.Entities;
 
 namespace AcademiaOnline.Application.Common.Interfaces
 {
     public interface IMateriasRepository
     {
         Task<IEnumerable<TbMateria>> GetAllAsync();
+        Task<IEnumerable<ObtenerMateriasPorProfesorDto>> ObtenerMateriasPorProfesor();
         Task<IEnumerable<TbMateria>> GetAllMateriasProfesoresAsync();
         Task<TbMateria?> GetByIdAsync(int id);
 

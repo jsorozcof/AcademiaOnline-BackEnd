@@ -1,4 +1,5 @@
-﻿using AcademiaOnline.Application.Common.Interfaces;
+﻿using AcademiaOnline.Application.Common.Dto;
+using AcademiaOnline.Application.Common.Interfaces;
 using AcademiaOnline.Application.Interfaces;
 using AcademiaOnline.Domain.Entities;
 
@@ -77,6 +78,11 @@ namespace AcademiaOnline.Application.Services
             await _materiasRepository.EliminarMateriaAsync(estudianteId, materiaId);
             await _materiasRepository.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<ObtenerMateriasPorProfesorDto>> ObtenerMateriasPorProfesor()
+        {
+            return await _materiasRepository.ObtenerMateriasPorProfesor();
         }
     }
 

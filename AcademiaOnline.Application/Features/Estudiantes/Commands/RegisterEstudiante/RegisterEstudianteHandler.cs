@@ -6,7 +6,7 @@ using MediatR;
 namespace AcademiaOnline.Application.Features.Estudiantes.Commands.Create
 {
 
-    public class RegisterEstudianteHandler : IRequestHandler<RegisterEstudianteCommand, bool>
+    public class RegisterEstudianteHandler : IRequestHandler<RegisterEstudianteCommand, (bool, string)>
     {
         private readonly IEstudianteService _estudianteService;
         private readonly IMateriasService _materiasService;
@@ -17,10 +17,9 @@ namespace AcademiaOnline.Application.Features.Estudiantes.Commands.Create
             _materiasService = materiasService;
         }
 
-        public async Task<bool> Handle(RegisterEstudianteCommand request, CancellationToken cancellationToken)
+        public async Task<(bool,string)> Handle(RegisterEstudianteCommand request, CancellationToken cancellationToken)
         {
-            var result = await _estudianteService.CrearAlumnoBasicAsync(request.Nombre, request.Email);
-            return result;
+            return await _estudianteService.CrearAlumnoBasicAsync(request.Nombre, request.Email);
         }
     }
 }

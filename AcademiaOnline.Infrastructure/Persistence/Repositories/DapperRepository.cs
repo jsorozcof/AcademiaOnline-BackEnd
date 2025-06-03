@@ -1,4 +1,5 @@
-﻿using AcademiaOnline.Application.Common.Interfaces;
+﻿using AcademiaOnline.Application.Common.Dto;
+using AcademiaOnline.Application.Common.Interfaces;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,24 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
             {
                 Console.WriteLine($"Error inesperado: {ex.Message}");
                 return false;
+            }
+        }
+
+        public async Task<IEnumerable<ObtenerMateriasPorProfesorDto>> GetAllSubjectsByTeacherAsync(string storedProcedure, object parameters)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+                return await connection.QueryAsync<ObtenerMateriasPorProfesorDto>(
+                    storedProcedure,
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener los registros: {ex.Message}");
+                throw;
             }
         }
 

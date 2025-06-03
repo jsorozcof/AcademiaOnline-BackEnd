@@ -1,4 +1,5 @@
-﻿using AcademiaOnline.Application.Features.Estudiantes.Commands.AdherirEstudianteAPrograma;
+﻿using AcademiaOnline.Application.Features.Estudiantes.Commands.AddSeleccionMateria;
+using AcademiaOnline.Application.Features.Estudiantes.Commands.AdherirEstudianteAPrograma;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.ObtenerProgramaDelEstudiante;
 using AcademiaOnline.Application.Features.Estudiantes.Commands.RegisterEstudiante;
 using AcademiaOnline.Application.Features.Estudiantes.Queries.GetAllEstudiantes;
@@ -61,6 +62,15 @@ namespace AcademiaOnline.Api.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPost("SaveSelectedSubjects")]
+        public async Task<IActionResult> SeleccionMaterias([FromBody] AddSeleccionMateriaCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
         [HttpPost("ObtenerProgramaEstudiante")]
         public async Task<IActionResult> ObtenerProgramaEstudiante([FromBody] ObtenerProgramaEstudianteCommand command)
         {

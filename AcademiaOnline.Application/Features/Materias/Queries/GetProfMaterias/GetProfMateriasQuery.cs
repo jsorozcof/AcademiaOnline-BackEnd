@@ -1,7 +1,7 @@
-﻿using AcademiaOnline.Application.Features.Materias.Dtos;
+﻿using AcademiaOnline.Application.Common.Dto;
 using MediatR;
 
 namespace AcademiaOnline.Application.Features.Materias.Queries.GetProfMaterias
 {
-    public record GetProfMateriasQuery : IRequest<List<ProfMateriasDto>>;
+    public record GetProfMateriasQuery : IRequest<IEnumerable<ObtenerMateriasPorProfesorDto>>;
 }

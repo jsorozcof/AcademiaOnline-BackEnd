@@ -12,7 +12,6 @@ namespace AcademiaOnline.Domain.Entities
         public string Codigo { get; set; } = null!;
         public string Nombre { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public int ProgramaId { get; set; }
         public int ProgramaCreditos { get; set; }
 
         public virtual TbEstudiantePrograma? TbEstudiantePrograma { get; set; }

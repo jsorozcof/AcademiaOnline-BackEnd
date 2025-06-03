@@ -1,11 +1,12 @@
-﻿using AcademiaOnline.Application.Features.Materias.Dtos;
+﻿using AcademiaOnline.Application.Common.Dto;
+using AcademiaOnline.Application.Features.Materias.Dtos;
 using AcademiaOnline.Application.Interfaces;
 using MediatR;
 
 namespace AcademiaOnline.Application.Features.Materias.Queries.GetProfMaterias
 {
 
-    public class GetProfMateriasHandler : IRequestHandler<GetProfMateriasQuery, List<ProfMateriasDto>>
+    public class GetProfMateriasHandler : IRequestHandler<GetProfMateriasQuery, IEnumerable<ObtenerMateriasPorProfesorDto>>
     {
         private readonly IMateriasService _materiasService;
 
@@ -14,13 +15,9 @@ namespace AcademiaOnline.Application.Features.Materias.Queries.GetProfMaterias
             _materiasService = materiasService;
         }
 
-        public async Task<List<ProfMateriasDto>> Handle(GetProfMateriasQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ObtenerMateriasPorProfesorDto>> Handle(GetProfMateriasQuery request, CancellationToken cancellationToken)
         {
-            var list = await _materiasService.ObtenerMateriasProfesoresAsync();
-
-            var result = list.Select(x => new ProfMateriasDto { MateriaId = x.Id, NombreMateria = x.Nombre }).ToList();
-
-            return result;
+            return await _materiasService.ObtenerMateriasPorProfesor();
         }
     }
 

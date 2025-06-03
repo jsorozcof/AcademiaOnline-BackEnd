@@ -1,21 +1,44 @@
-﻿using AcademiaOnline.Application.Common.Interfaces;
+﻿using AcademiaOnline.Application.Common.Dto;
+using AcademiaOnline.Application.Common.Interfaces;
 using AcademiaOnline.Domain.Entities;
 using AcademiaOnline.Infrastructure.Academia;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Data;
 
 namespace AcademiaOnline.Infrastructure.Persistence.Repositories
 {
 
-    public class MateriasRepository : IMateriasRepository
+    public class MateriasRepository : DapperRepository<TbEstudiante>, IMateriasRepository 
     {
         private readonly AcademiaOnlineBDContext _context;
 
-        public MateriasRepository(AcademiaOnlineBDContext context)
+        private readonly string _connectionString;
+
+        public MateriasRepository(AcademiaOnlineBDContext context, IConfiguration configuration) : base(configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _connectionString = configuration.GetConnectionString("ConexionDatabase")
+                                ?? throw new ArgumentNullException("Connection string is missing.");
         }
 
+
         // Para traer materias y profesores
+        public async Task<IEnumerable<ObtenerMateriasPorProfesorDto>> ObtenerMateriasPorProfesor()
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                var result = await GetAllSubjectsByTeacherAsync("fo_ObtenerMateriasPorProfesor", parameters);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al validar si el estudiante ya tiene clase con este profesor.", ex);
+            }
+        }
         public async Task<IEnumerable<TbMateria>> GetAllMateriasProfesoresAsync()
         {
             return await _context.TbMaterias.Include(x => x.TbProfesorMateria).ToListAsync();

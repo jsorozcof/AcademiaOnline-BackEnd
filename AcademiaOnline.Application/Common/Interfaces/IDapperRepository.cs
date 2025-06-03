@@ -1,7 +1,10 @@
-﻿namespace AcademiaOnline.Application.Common.Interfaces
+﻿using AcademiaOnline.Application.Common.Dto;
+
+namespace AcademiaOnline.Application.Common.Interfaces
 {
     public interface IDapperRepository<T>
     {
+        Task<IEnumerable<ObtenerMateriasPorProfesorDto>> GetAllSubjectsByTeacherAsync(string storedProcedure, object parameters);
         Task<IEnumerable<T>> GetAllAsync(string storedProcedure, object parameters);
         Task<T?> GetByIdAsync(string storedProcedure, object parameters);
         Task<bool> UpsertAsync(string storedProcedure, object parameters);

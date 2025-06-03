@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AcademiaOnline.Infrastructure.Persistence.Repositories
 {
@@ -22,6 +23,23 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
                                 ?? throw new ArgumentNullException("Connection string is missing.");
         }
 
+
+        public async Task<bool> SaveSelectedSubjectsAsync(List<int> MateriaIds, int EstudianteId)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            foreach (var materiaId in MateriaIds)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@EstudianteId", EstudianteId, DbType.Int32);
+                parameters.Add("@MateriaId", materiaId, DbType.Int32);
+
+                await connection.ExecuteAsync("fo_InsertarSeleccionMateria", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return true;
+        }
         public async Task<bool> AddAsync(string codigo, string nombre, string email)
         {
             try
@@ -31,7 +49,6 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
                     Codigo = codigo,
                     Nombre = nombre,
                     Email = email,
-                    ProgramaId = 1,
                     ProgramaCreditos = 9
                 };
 
@@ -39,21 +56,10 @@ namespace AcademiaOnline.Infrastructure.Persistence.Repositories
                 int cambios = await _context.SaveChangesAsync();
 
                 if (cambios > 0)
-                {
-                    int estudianteId = ent.Id;
-
-                    // Insertar en TbEstudiante_Programa
-                    var estudiantePrograma = new TbEstudiantePrograma
-                    {
-                        EstudianteId = estudianteId,
-                        ProgramaId = ent.ProgramaId
-                    };
-
-                    await _context.TbEstudianteProgramas.AddAsync(estudiantePrograma);
-                    cambios = await _context.SaveChangesAsync();
-
                     return cambios > 0;
-                }
+
+
+            
 
                 return false;
             }
